@@ -2,6 +2,8 @@
 
 require_once('i18n.php');
 
+use function Helpers\I18n\translate;
+
 class Person
 {
     public $firstName;
