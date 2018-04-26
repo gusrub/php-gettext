@@ -1,11 +1,12 @@
 <?php
 
+putenv("APP_LANG=en");
 require_once('i18n.php');
-
-use function Helpers\I18n\translate;
 
 class Person
 {
+    const VERSION = '1.0.0';
+
     public $firstName;
     public $lastName;
     public $dob;
@@ -21,12 +22,28 @@ class Person
     public function printInfo()
     {
         $age = $this->calculateAge();
-        echo translate("Hello my name is %s %s and I'm %s\n", $this->firstName, $this->lastName, $age);
+        echo I18n::translate(
+            "Hello my name is {firstName} {lastName} and I'm {age}\n",
+            [
+                'firstName' => $this->firstName,
+                'lastName' => $this->lastName,
+                'age' => $age
+            ]
+        );
     }
 
     public function goodBye()
     {
-        echo translate("That's it, good bye!\n");
+        echo I18n::translate("That's it, good bye!\n");
+    }
+
+    public function printVersion()
+    {
+        echo I18n::translate("\n(running version {version})\n",
+            [
+                'version' => self::VERSION
+            ]
+        );
     }
 
     private function calculateAge()
@@ -37,9 +54,17 @@ class Person
         $response = null;
 
         if($age < 18) {
-            $response = translate("%s years which means I'm a teen", $age);
+            $response = I18n::translate("{age} years which means I'm a teen",
+                [
+                    'age' => $age
+                ]
+            );
         } else {
-            $response = translate("%s years which means I'm a grown up", $age);
+            $response = I18n::translate("{age} years which means I'm a grown up",
+                [
+                    'age' => $age
+                ]
+            );
         }
 
         return $response;
@@ -47,9 +72,10 @@ class Person
 }
 
 $p = new Person(
-    'Gustavo',
-    'Rubio',
-    '1985-06-19'
+    'John',
+    'Wayne',
+    '1980-01-20'
 );
 $p->printInfo();
 $p->goodBye();
+$p->printVersion();
